@@ -98,7 +98,7 @@ function startScreen() {
       initializeGame();
     } else if (state === "running") {
       updateBullets();
-      updateEnemyBlocks();
+      updateEnemyInterval();
       checkCollisions();
       checkGameOver();
     }
