@@ -16,7 +16,8 @@ let enemyBlocks = [];
 let bullets = [];
 
 let lastEnemySpawnTime = 0;
-const enemySpawnInterval = 3000;
+let enemySpawnInterval = 750;
+let counter = document.getElementById("scoreCounter");
 
 // draw
 window.addEventListener("load", draw);
@@ -58,19 +59,23 @@ function mousemoveHandler(e) {
   player.x = e.clientX - cnv.offsetLeft - player.width / 2;
 }
 
-
 // Drw Game
 function gameScreen() {
-    ctx.fillStyle = "#333";
-    ctx.fillRect(0, 0, cnv.width, cnv.height);
+  ctx.fillStyle = "#333";
+  ctx.fillRect(0, 0, cnv.width, cnv.height);
   ctx.fillStyle = player.color;
   ctx.fillRect(player.x, player.y, player.width, player.height);
-    // bullets
-    ctx.fillStyle = "#FFFF00";
-    for (let i = 0; i < bullets.length; i++) {
-      ctx.fillRect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
-    }
-    // enemy blocks
+  // bullets
+  ctx.fillStyle = "#FFFF00";
+  for (let i = 0; i < bullets.length; i++) {
+    ctx.fillRect(
+      bullets[i].x,
+      bullets[i].y,
+      bullets[i].width,
+      bullets[i].height
+    );
+  }
+  // enemy blocks
   ctx.fillStyle = "#FF0000";
   for (let i = 0; i < enemyBlocks.length; i++) {
     ctx.fillRect(
@@ -84,28 +89,32 @@ function gameScreen() {
 
 // game screen
 function startScreen() {
-    ctx.fillStyle = "#333";
-    ctx.fillRect(0, 0, cnv.width, cnv.height);
-  
-    ctx.font = "48px Calibri";
-    ctx.fillStyle = "white";
-    ctx.fillText("Press SPACE to Begin!", cnv.height / 2 - 75, cnv.width / 2 - 100);
-  }
+  ctx.fillStyle = "#333";
+  ctx.fillRect(0, 0, cnv.width, cnv.height);
 
-  // game logic
-  function gameLogic() {
-    if (state === "start") {
-      initializeGame();
-    } else if (state === "running") {
-      updateBullets();
-      updateEnemyInterval();
-      checkCollisions();
-      checkGameOver();
-    }
+  ctx.font = " bold 36px Courier New";
+  ctx.fillStyle = "greenyellow";
+  ctx.fillText(
+    "Press SPACE to Begin!",
+    cnv.height / 2 - 100,
+    cnv.width / 2 - 125
+  );
+}
+
+// game logic
+function gameLogic() {
+  if (state === "start") {
+    initializeGame();
+  } else if (state === "running") {
+    updateBullets();
+    updateEnemyInterval();
+    checkCollisions();
+    checkGameOver();
   }
+}
 
 // transition state
-  function initializeGame() {
+function initializeGame() {
   state = "running";
 }
 
@@ -179,7 +188,7 @@ function spawnEnemy() {
     y: -25,
     width: 25,
     height: 25,
-    speed: 2,
+    speed: 1,
   };
 
   enemyBlocks.push(enemy);
@@ -190,9 +199,13 @@ function gameOver() {
   ctx.fillStyle = "#333";
   ctx.fillRect(0, 0, cnv.width, cnv.height);
 
-  ctx.font = "48px Calibri";
-  ctx.fillStyle = "white";
-  ctx.fillText("GAME OVER! PRESS SPACE TO RESTART", cnv.height / 2, cnv.width / 2 - 75);
+  ctx.font = " bold 36px Courier New";
+  ctx.fillStyle = "greenyellow";
+  ctx.fillText(
+    "GAME OVER! PRESS SPACE TO RESTART",
+    cnv.height / 2 - 250,
+    cnv.width / 2 - 100
+  );
 }
 
 function reset() {
