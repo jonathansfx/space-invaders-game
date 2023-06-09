@@ -17,7 +17,6 @@ let bullets = [];
 
 let lastEnemySpawnTime = 0;
 let enemySpawnInterval = 750;
-let counter = document.getElementById("scoreCounter");
 
 // draw
 window.addEventListener("load", draw);
@@ -57,6 +56,23 @@ function mousedownHandler(e) {
 
 function mousemoveHandler(e) {
   player.x = e.clientX - cnv.offsetLeft - player.width / 2;
+}
+if (e.clientX < cnv.width) {
+  player.x = 0;
+} else if (e.clientX > cnv.width) {
+  player.x = cnv.width;
+}
+
+// game logic
+function gameLogic() {
+  if (state === "start") {
+    initializeGame();
+  } else if (state === "running") {
+    updateBullets();
+    updateEnemyInterval();
+    checkCollisions();
+    checkGameOver();
+  }
 }
 
 // Drw Game
@@ -99,18 +115,6 @@ function startScreen() {
     cnv.height / 2 - 100,
     cnv.width / 2 - 125
   );
-}
-
-// game logic
-function gameLogic() {
-  if (state === "start") {
-    initializeGame();
-  } else if (state === "running") {
-    updateBullets();
-    updateEnemyInterval();
-    checkCollisions();
-    checkGameOver();
-  }
 }
 
 // transition state
