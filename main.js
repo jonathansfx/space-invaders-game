@@ -11,9 +11,10 @@ let player = {
   height: 25,
   color: "#8F00FF",
 };
-
+let score = 0;
 let enemyBlocks = [];
 let bullets = [];
+let outputEl = document.getElementById("score");
 
 let lastEnemySpawnTime = 0;
 let enemySpawnInterval = 750;
@@ -57,10 +58,13 @@ function mousedownHandler(e) {
 function mousemoveHandler(e) {
   player.x = e.clientX - cnv.offsetLeft - player.width / 2;
 }
-if (e.clientX < cnv.width) {
-  player.x = 0;
-} else if (e.clientX > cnv.width) {
-  player.x = cnv.width;
+
+function canvasBoundary() {
+  if (player.x < 0) {
+    player.x = 0;
+  } else if (player.x + player.width > cnv.width) {
+    player.x = cnv.width - player.width;
+  }
 }
 
 // game logic
@@ -72,12 +76,16 @@ function gameLogic() {
     updateEnemyInterval();
     checkCollisions();
     checkGameOver();
+    canvasBoundary();
   }
 }
 
 // Drw Game
 function gameScreen() {
-  ctx.fillStyle = "#333";
+  let grd = ctx.createLinearGradient(0, 0, 0, cnv.height);
+  grd.addColorStop(0, "#2E2B33");
+  grd.addColorStop(1, "#87CEEB");
+  ctx.fillStyle = grd;
   ctx.fillRect(0, 0, cnv.width, cnv.height);
   ctx.fillStyle = player.color;
   ctx.fillRect(player.x, player.y, player.width, player.height);
@@ -153,6 +161,8 @@ function checkCollisions() {
         bullets[i].y < enemyBlocks[j].y + enemyBlocks[j].height &&
         bullets[i].y + bullets[i].height > enemyBlocks[j].y
       ) {
+        score++;
+        outputEl.innerHTML = score;
         // remove bullet / block
         bullets.splice(i, 1);
         enemyBlocks.splice(j, 1);
@@ -215,6 +225,8 @@ function gameOver() {
 function reset() {
   state = "start";
   player.x = cnv.width / 2;
+  outputEl.innerHTML = "";
+  score = 0;
   enemyBlocks = [];
   bullets = [];
 }
